@@ -274,7 +274,7 @@ int main(int argc,char ** argv)
 			string newPicName = to_string(attrProb)+"_"+picName;
 
 			string finalPath = saveFolder+"/"+newPicName;
-
+            
 			cv::imwrite(finalPath,img);
 
 			  for (int i = 0; i < numOfAttribute; i++)

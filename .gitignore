@@ -14,3 +14,4 @@ build/
 !*.c
 !*.txt
 !.gitignore
+!*.sh
