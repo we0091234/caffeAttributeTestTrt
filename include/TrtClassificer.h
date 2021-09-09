@@ -86,6 +86,8 @@ public:
 		_engine1->destroy();
 		if (_runtime)
 		_runtime->destroy();
+		if(m_numOutPut)
+		delete [] m_numOutPut;
 		std::cout << "Trt destory is running" << std::endl;
 
 	}
@@ -103,7 +105,7 @@ public:
 	IExecutionContext *context{nullptr};
 
 	int m_numAttribute;
-	int *m_numOutPut;
+	int *m_numOutPut{nullptr};
 	
 	std::vector<std::string> m_outPutName;
 };

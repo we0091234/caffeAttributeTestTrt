@@ -4,6 +4,7 @@
 
 #include "utils.h"
 #include <unistd.h>
+#include <regex>
 // #include "scanfFile.h"
 //#define  numOfAttribute 11   //���Եĸ�����
 //using namespace nvcaffeparser1;
