@@ -22,6 +22,7 @@
 #include<string>
 #include <iomanip>
 #include <vector>
+#include "utils.h"
 static sample::Logger gLogger;
 
 class TrtClassificer
@@ -29,13 +30,14 @@ class TrtClassificer
 public:
 	TrtClassificer(int INPUT_H,int INPUT_W,int CHANNELS,const char * INPUT_NAME,const char *OUTPUT_NAME,int outputSize);
 	TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const char * INPUT_NAME, std::vector<std::string>OUTPUT_NAME, int outputSize);
-    TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const char * INPUT_NAME, const char *OUTPUT_NAME, int outputSize, int numAttribute, int *numOutPut,std::vector<std::string>& outPutName);
+    TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const char * INPUT_NAME,const char * outPutNameArray,const char *everyAttrNumArray);
 	// void doInferenceMultiOutPut(float* input, float **&output, int batchSize);
 	
+    int getNumOfAttribute();
+    int * numOfOutputsPerAttr();
+    void imageProcess(char *picName, float *data,float *mean_data);
 
-
-
-	void CaffeToGIEModel(const char* deployFile,const char* modelFile,const std::vector<std::string>& outputs, unsigned int maxBatchSize, const char * TrtSaveFileName);
+	void CaffeToGIEModel(const char* deployFile,const char* modelFile, unsigned int maxBatchSize, const char * TrtSaveFileName);
 	void doInference( float* input, float* output, int batchSize);
 	void doInference(IExecutionContext& context, float* input, float **&output, int batchSize);
 	void doInferenceMultiOutPut(float* input, float **&output, int batchSize);
@@ -94,9 +96,10 @@ public:
 	int _input_h;
 	int _input_w;
 	int _channel;
+	int _batchSize;
 	IHostMemory *_gieModelStream{ nullptr };
-	char *_inputName;
-	char *_outputName;
+	char *_inputName{nullptr};
+	char *_outputName{nullptr};
 	int  _outputNumber;
 	char *_trtModelStream{ nullptr };
 	int _trtModelStreamSize;
@@ -104,8 +107,10 @@ public:
 	ICudaEngine* _engine1{ nullptr };
 	IExecutionContext *context{nullptr};
 
-	int m_numAttribute;
+	int m_numAttribute{0};
 	int *m_numOutPut{nullptr};
+
+	float *data{nullptr};
 	
 	std::vector<std::string> m_outPutName;
 };

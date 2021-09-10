@@ -4,6 +4,7 @@
 #include <opencv2/dnn/dnn.hpp>
 #include "calibrator.h"
 #include "cuda_runtime_api.h"
+// #include "TrtClassificer.h"
 #include "utils1.h"
 
 Int8EntropyCalibrator2::Int8EntropyCalibrator2(int batchsize, int input_w, int input_h, const char* img_dir, const char* calib_table_name, const char* input_blob_name, bool read_cache)

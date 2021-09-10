@@ -1,5 +1,6 @@
 #include "TrtClassificer.h"
 #include "calibrator.h"
+
 using namespace nvcaffeparser1;
 // #define numAttribute 11
 // #define USE_INT8
@@ -17,25 +18,22 @@ TrtClassificer::TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const cha
 }
 
 
- TrtClassificer::TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const char * INPUT_NAME, const char *OUTPUT_NAME, int outputSize, int numAttribute, int *numOutPut,std::vector<std::string>& outPutName)
+ TrtClassificer::TrtClassificer(int INPUT_H, int INPUT_W, int CHANNELS, const char * INPUT_NAME,const char * outPutNameString,const char *everyAttrNumArray)
  {
-    	this->_input_h = INPUT_H;
+    this->_input_h = INPUT_H;
 	this->_input_w = INPUT_W;
 	this->_channel = CHANNELS;
 	this->_inputName = strdup(INPUT_NAME);
-	this->_outputName = strdup(OUTPUT_NAME);
-	this->_outputNumber = outputSize;
-		this->m_numAttribute = numAttribute;
-	this->m_numOutPut = new int[this->m_numAttribute];
-	for (int i = 0; i < m_numAttribute; i++)
-	{
-		m_numOutPut[i] = numOutPut[i];
-	}
-	m_outPutName = outPutName;
+	this->m_outPutName=split(outPutNameString,",");
+	this->m_numAttribute = this->m_outPutName.size();
+    auto  numArray = split(everyAttrNumArray,",");
+	m_numOutPut = new int[this->m_numAttribute];
+	for(int i = 0; i<this->m_numAttribute ;i++)
+     this->m_numOutPut[i] =atoi(numArray[i].c_str());
  }
 
 
-void TrtClassificer::CaffeToGIEModel(const char* deployFile, const char* modelFile, const std::vector<std::string>& outputs, unsigned int maxBatchSize, const char * TrtSaveFileName)
+void TrtClassificer::CaffeToGIEModel(const char* deployFile, const char* modelFile, unsigned int maxBatchSize, const char * TrtSaveFileName)
 {
 
 	std::cout << "Convert Caffemodel to  Trt  model...." << std:: endl;
@@ -46,7 +44,7 @@ void TrtClassificer::CaffeToGIEModel(const char* deployFile, const char* modelFi
 	INetworkDefinition* network = builder->createNetworkV2(0U);
 	ICaffeParser* parser = createCaffeParser();
 	const IBlobNameToTensor* blobNameToTensor = parser->parse(deployFile, modelFile, *network, nvinfer1::DataType::kFLOAT);
-	for (auto& s : outputs)
+	for (auto& s : this->m_outPutName)
 		network->markOutput(*blobNameToTensor->find(s.c_str()));
 	builder->setMaxBatchSize(maxBatchSize);
 	builder->setMaxWorkspaceSize(1 << 30); 
@@ -105,6 +103,7 @@ void TrtClassificer::doInferenceMultiOutPut(float* input, float **&output, int b
 	// input and output buffer pointers that we pass to the engine - the engine requires exactly IEngine::getNbBindings(),
 	// of these, but in this case we know that there is exactly one input and one output.
 	// std::cout<<engine.getNbBindings()<<std::endl;
+	// std::cout<<m_numAttribute+1<<std::endl;
 	assert(engine.getNbBindings() == m_numAttribute+1); //numofAttribute  and   input  layer
 	void* buffers[12];
 
@@ -151,3 +150,13 @@ void TrtClassificer::doInferenceMultiOutPut(float* input, float **&output, int b
 		CHECK(cudaFree(buffers[opIndex[i]]));
 	}
 }
+
+int TrtClassificer:: getNumOfAttribute()
+{
+	return this->m_numAttribute;
+}
+
+  int *TrtClassificer:: numOfOutputsPerAttr()
+  {
+	  return this->m_numOutPut;
+  }
