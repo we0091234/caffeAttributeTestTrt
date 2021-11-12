@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc,char ** argv)
 {
 	cudaSetDevice(0);      //gpuID
-
+    float sumTime = 0;
 	 const int INPUT_H = 128; //输入高
     const int INPUT_W = 128;//输入宽
      const int CHANNELS = 3;//通道数
@@ -17,13 +17,14 @@ int main(int argc,char ** argv)
     int MaxBatch=8;
 
 	double allTimeBegin=static_cast<double>(getTickCount());
-	int rightLabel = 0;
-	float sumTime = 0;
+
 	vector<vector<float> > meanArray={{ 110.54368197 ,107.80291569 ,107.11519277 },       //pedestrainGlobal mean
 		                              { 79.01901062, 78.72796895, 80.79338091 },             //NoStdVehicle    mean
 									  { 110.54368197 ,107.80291569 ,107.11519277 }};           ////vehicleSpecial mean
 	int AttributeNumber=atoi(argv[6]);
 	float mean_data[] = { 79.01901062, 78.72796895, 80.79338091 };//nostd_vehicle
+	// float mean_data[] = { 99.95327338, 96.27925874, 86.54154894};//VehicleDriver
+
 	TrtClassificer *pMuclassifier=new TrtClassificer(INPUT_H, INPUT_W, CHANNELS, INPUT_BLOB_NAME,argv[8],argv[9]);
 	auto numOfAttributes= pMuclassifier->getNumOfAttribute();
 	auto numOfOutputsPerAttrArray =pMuclassifier->numOfOutputsPerAttr();
@@ -36,6 +37,8 @@ int main(int argc,char ** argv)
 	 }
 	 else if (strcmp(argv[3],"-d")==0)
 	 {
+		 	int rightLabel = 0;
+		
 		 Alabel  *pAlabel = new Alabel[numOfOutputsPerAttrArray[AttributeNumber]];
 		 for (int i = 0; i < numOfOutputsPerAttrArray[AttributeNumber]; i++)
 		 {

@@ -93,6 +93,7 @@ public:
 		std::cout << "Trt destory is running" << std::endl;
 
 	}
+	protected:
 	int _input_h;
 	int _input_w;
 	int _channel;
