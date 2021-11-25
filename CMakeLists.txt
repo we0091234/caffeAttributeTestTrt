@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(AttributePlate)
+project(caffeAttribute)
 
 add_definitions(-std=c++11)
 
@@ -37,14 +37,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -mavx2 -Ofast -Wfatal-e
 # cuda_add_library(yololayer SHARED ${PROJECT_SOURCE_DIR}/yololayer.cu)
 # target_link_libraries(yololayer nvinfer cudart ${OpenCV_LIBS})
 # target_link_libraries(yololayer nvinfer cudart "/usr/local/lib/opencv4.1/")
-aux_source_directory(. SOURCEFILE)
-add_executable(AttributePlate ${SOURCEFILE})
+# aux_source_directory(${PROJECT_SOURCE_DIR}/include SOURCEFILE)
+add_executable(caffeAttribute myCaffeInfer_yolotestTime.cpp  logger.cpp calibrator.cpp TrtClassificer.cpp utils.cpp)
 # add_executable(Attribute ${PROJECT_SOURCE_DIR}/logger.cpp ${PROJECT_SOURCE_DIR}/myTensorRT.cpp ${PROJECT_SOURCE_DIR}/logger.h ${PROJECT_SOURCE_DIR}/common.h   ${PROJECT_SOURCE_DIR}/argsParser.h ${PROJECT_SOURCE_DIR}/buffers.h ${PROJECT_SOURCE_DIR}/half.h  ${PROJECT_SOURCE_DIR}/scanfFile.cpp)
-target_link_libraries(AttributePlate nvinfer)
-target_link_libraries(AttributePlate cudart)
-target_link_libraries(AttributePlate nvcaffe_parser)
+target_link_libraries(caffeAttribute nvinfer)
+target_link_libraries(caffeAttribute cudart)
+target_link_libraries(caffeAttribute nvcaffe_parser)
 # target_link_libraries(Attribute yololayer)
-target_link_libraries(AttributePlate ${OpenCV_LIBS})
+target_link_libraries(caffeAttribute ${OpenCV_LIBS})
 # target_link_libraries(Attribute "/usr/local/lib/opencv4.1/")
 
 add_definitions(-O0 -pthread)
