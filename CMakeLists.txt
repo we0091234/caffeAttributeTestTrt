@@ -38,7 +38,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -mavx2 -Ofast -Wfatal-e
 # target_link_libraries(yololayer nvinfer cudart ${OpenCV_LIBS})
 # target_link_libraries(yololayer nvinfer cudart "/usr/local/lib/opencv4.1/")
 # aux_source_directory(${PROJECT_SOURCE_DIR}/include SOURCEFILE)
-add_executable(caffeAttribute myCaffeInfer_yolotestTime.cpp  logger.cpp calibrator.cpp TrtClassificer.cpp utils.cpp)
+add_executable(caffeAttribute myCaffeInfer_ori1.cpp  logger.cpp calibrator.cpp TrtClassificer.cpp utils.cpp)
 # add_executable(Attribute ${PROJECT_SOURCE_DIR}/logger.cpp ${PROJECT_SOURCE_DIR}/myTensorRT.cpp ${PROJECT_SOURCE_DIR}/logger.h ${PROJECT_SOURCE_DIR}/common.h   ${PROJECT_SOURCE_DIR}/argsParser.h ${PROJECT_SOURCE_DIR}/buffers.h ${PROJECT_SOURCE_DIR}/half.h  ${PROJECT_SOURCE_DIR}/scanfFile.cpp)
 target_link_libraries(caffeAttribute nvinfer)
 target_link_libraries(caffeAttribute cudart)
