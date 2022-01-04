@@ -47,7 +47,7 @@ void TrtClassificer::CaffeToGIEModel(const char* deployFile, const char* modelFi
 	for (auto& s : this->m_outPutName)
 		network->markOutput(*blobNameToTensor->find(s.c_str()));
 	builder->setMaxBatchSize(maxBatchSize);
-	builder->setMaxWorkspaceSize(1 << 30); 
+	config->setMaxWorkspaceSize(1 << 30); 
 
 #ifdef USE_FP16
 	config->setFlag(BuilderFlag::kFP16);

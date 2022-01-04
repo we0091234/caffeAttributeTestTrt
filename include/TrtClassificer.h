@@ -1,8 +1,9 @@
 #ifndef TRTCLASSFIER_H_
 #define TRTCLASSFIER_H_
 
-#include "logger.h"
-#include "common.h"
+// #include "logger.h"
+#include "logging.h"
+// #include "common.h"
 // #include "argsParser.h"
 // #include "buffers.h"
 #include "NvCaffeParser.h"
@@ -24,6 +25,17 @@
 #include <vector>
 #include "utils.h"
 static sample::Logger gLogger;
+using namespace nvinfer1;
+#define CHECK(status) \
+    do\
+    {\
+        auto ret = (status);\
+        if (ret != 0)\
+        {\
+            std::cerr << "Cuda failure: " << ret << std::endl;\
+            abort();\
+        }\
+    } while (0)
 
 class TrtClassificer
 {

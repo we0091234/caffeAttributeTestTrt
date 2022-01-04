@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <string.h>
+#include <dirent.h>
 #include <fstream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -50,6 +51,7 @@ std::vector<std::string> split(std::string str, std::string pattern);
 void  getNumOfAttribute(const string &txtfileName, int *&ppAttrTagArray);
 vector<string>getLabelChinese();
 string getLabel1(const vector<string>& labelMap, int index);
+int read_files_in_dir(const char *p_dir_name, std::vector<std::string> &file_names);
 
 
 #endif

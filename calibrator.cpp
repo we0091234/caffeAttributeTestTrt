@@ -4,8 +4,8 @@
 #include <opencv2/dnn/dnn.hpp>
 #include "calibrator.h"
 #include "cuda_runtime_api.h"
-// #include "TrtClassificer.h"
-#include "utils1.h"
+#include "TrtClassificer.h"
+// #include "utils1.h"
 
 Int8EntropyCalibrator2::Int8EntropyCalibrator2(int batchsize, int input_w, int input_h, const char* img_dir, const char* calib_table_name, const char* input_blob_name, bool read_cache)
     : batchsize_(batchsize)
@@ -18,13 +18,13 @@ Int8EntropyCalibrator2::Int8EntropyCalibrator2(int batchsize, int input_w, int i
     , read_cache_(read_cache)
 {
     input_count_ = 3 * input_w * input_h * batchsize;
-    CUDA_CHECK(cudaMalloc(&device_input_, input_count_ * sizeof(float)));
+    CHECK(cudaMalloc(&device_input_, input_count_ * sizeof(float)));
     read_files_in_dir(img_dir, img_files_);
 }
 
 Int8EntropyCalibrator2::~Int8EntropyCalibrator2()
 {
-    CUDA_CHECK(cudaFree(device_input_));
+    CHECK(cudaFree(device_input_));
 }
 
 int Int8EntropyCalibrator2::getBatchSize() const
@@ -53,7 +53,7 @@ bool Int8EntropyCalibrator2::getBatch(void* bindings[], const char* names[], int
     img_idx_ += batchsize_;
     cv::Mat blob = cv::dnn::blobFromImages(input_imgs_, 1.0 , cv::Size(input_w_, input_h_), cv::Scalar(102.61518568033352, 101.82123008091003, 107.42755172448233 ), true, false);
 
-    CUDA_CHECK(cudaMemcpy(device_input_, blob.ptr<float>(0), input_count_ * sizeof(float), cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(device_input_, blob.ptr<float>(0), input_count_ * sizeof(float), cudaMemcpyHostToDevice));
     assert(!strcmp(names[0], input_blob_name_));
     bindings[0] = device_input_;
     return true;
